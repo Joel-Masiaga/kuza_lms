@@ -1,0 +1,83 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Home - Kuza Ndoto Academy{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Welcome Section -->
+    <div class="course-section mb-5 p-4 rounded shadow-lg bg-light border-start border-success">
+        <h4 class="fw-bold">Welcome to Kuza Ndoto Academy!</h4>
+        <p>
+            We are thrilled to have you join our learning community. Our academy is dedicated to providing top-notch mentorship and career guidance
+            to help you achieve your professional aspirations. Feel free to explore our courses, engage with the community, and unlock your potential.
+        </p>
+    </div>
+
+    <!-- My Courses Section -->
+    <div class="course-section mb-5 p-4 rounded shadow-lg bg-light border-start border-success">
+        <h4 class="fw-bold">My Courses</h4>
+        <div class="row g-4">
+            {% if enrolled_courses %}
+                {% for course in enrolled_courses %}
+                    <div class="col-sm-6 col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            {% if course.image %}
+                                <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
+                            {% else %}
+                                <img src="{% static 'images/default-course.jpg' %}" class="card-img-top" alt="Default Course Image">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ course.title }}</h5>
+                                <p class="card-text">{{ course.description|truncatewords:15|safe }}</p>
+                                {% with first_lesson=course.modules.first.lessons.first %}
+                                    {% if first_lesson %}
+                                        <a href="{% url 'lesson_detail' first_lesson.id %}" class="btn btn-success btn-sm me-3">Go to Course</a>
+                                    {% else %}
+                                        <a href="#" class="btn btn-secondary btn-sm me-3 disabled">No Lessons Available</a>
+                                    {% endif %}
+                                {% endwith %}
+                                <form method="POST" action="{% url 'course_detail' course.id %}" class="d-inline-block float-end">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="unenroll">
+                                    <button type="submit" class="btn btn-danger btn-sm">Unenroll</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">You are not enrolled in any courses yet. Start exploring and enroll today!</p>
+            {% endif %}
+        </div>
+    </div>
+
+<!-- Explore Other Courses Section -->
+<div class="course-section mb-5 p-4 rounded shadow-lg bg-light border-start border-success">
+    <h4 class="fw-bold mb-4">Explore Other Courses</h4>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        {% for course in other_courses %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    {% if course.image %}
+                        <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
+                    {% else %}
+                        <img src="{% static 'images/default-course.jpg' %}" class="card-img-top" alt="Default Course Image">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text">{{ course.description|truncatewords:15|safe }}</p>
+                        <a href="{% url 'course_detail' course.id %}" class="btn btn-success">View Course</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+ 
+
+</div>
+{% endblock %}

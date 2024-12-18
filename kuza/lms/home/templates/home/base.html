@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Kuza Ndoto Academy{% endblock %}</title>
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'home/main.css' %}">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top p-3">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+            <img src="{% static 'home/logo.png' %}" alt="Logo" class="me-2">
+            <span class="fw-bold">Kuza Ndoto Academy</span>
+        </a>
+        <div class="ms-auto d-flex align-items-center">
+            <form class="d-flex me-3" method="GET" action="#">
+                <input class="form-control me-2" type="search" placeholder="Search..." name="q">
+                <button class="btn btn-outline-success btn-rounded" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            <a href="#" class="nav-link text-secondary position-relative me-3">
+                <i class="fas fa-envelope fa-lg"></i>
+                <span class="badge bg-danger position-absolute">1</span>
+            </a>
+            <a href="#" class="nav-link text-secondary position-relative me-3">
+                <i class="fas fa-bell fa-lg"></i>
+                <span class="badge bg-danger position-absolute">0</span>
+            </a>
+            <a href="{% url 'profile' %}" class="nav-link text-secondary">
+                {% if user.profile.image %}
+                    <img src="{{ user.profile.image.url }}" class="rounded-circle" style="width: 35px; height: 35px;">
+                {% else %}
+                    <i class="fas fa-user-circle fa-lg"></i>
+                {% endif %}
+            </a>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link text-secondary">
+                    <i class="fas fa-sign-out-alt fa-lg"></i>
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container-fluid main-content">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 sidebar bg-white p-3 rounded shadow-sm mt-5 mt-md-2" id="sidebar" style="position: absolute; max-height: 100vh; overflow-y: auto;">
+                <button class="btn btn-outline-success d-md-block d-lg-none w-100 p-3" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#sidebarMenu" 
+                        aria-expanded="false" 
+                        aria-controls="sidebarMenu" 
+                        style="position: relative; z-index: 1;">
+                    <i class="fas fa-bars"></i> Menu
+                </button>
+    
+                <div class="collapse d-md-block" id="sidebarMenu">
+                    <div class="list-group">
+                        <a href="{% url 'home' %}" class="list-group-item list-group-item-action"><i class="fas fa-home me-2"></i>Home</a>
+                        <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-book me-2"></i>My Learning</a>
+                        <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-calendar-alt me-2"></i>Timetable</a>
+                        <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-question-circle me-2"></i>Quizzes</a>
+                        <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-users me-2"></i>Community</a>
+                    </div>
+                </div>
+            </nav>
+    
+            <!-- Main Content -->
+            <div class="col-12 col-md-9 col-lg-10 offset-0 offset-md-3 offset-lg-2 p-3 p-md-4 bg-white shadow rounded">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Footer -->
+    <footer class="bg-success text-light py-4 mt-5">
+        <div class="container text-center">
+            <h5 class="text-white">Kuza Ndoto Academy</h5>
+            <p>Empowering Dreams, Transforming Futures.</p>
+            <div class="mb-3">
+                <a href="#" class="mx-2">Home</a>
+                <a href="#" class="mx-2">Learning</a>
+                <a href="#" class="mx-2">Community</a>
+                <a href="#" class="mx-2">Support</a>
+            </div>
+            <div>
+                <a href="#" class="text-light mx-2"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" class="text-light mx-2"><i class="fab fa-instagram fa-lg"></i></a>
+                <a href="#" class="text-light mx-2"><i class="fab fa-linkedin fa-lg"></i></a>
+                <a href="#" class="text-light mx-2"><i class="fab fa-x-twitter fa-lg"></i></a> 
+                <a href="#" class="text-light mx-2"><i class="fab fa-youtube fa-lg"></i></a> 
+            </div>
+            <p class="mt-3 mb-0">&copy; 2024 Kuza Ndoto Academy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/0f20933421.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
